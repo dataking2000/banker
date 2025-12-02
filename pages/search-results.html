@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results | Bank of America</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <style>
+        .search-results-section {
+            padding: 40px 0;
+            min-height: 60vh;
+        }
+        
+        .search-input-box {
+            display: flex;
+            margin-bottom: 40px;
+        }
+        
+        .search-input-box input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            font-size: 1.1rem;
+            border: 2px solid var(--primary-color);
+            border-right: none;
+            border-radius: 6px 0 0 6px;
+        }
+        
+        .search-input-box button {
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 0 6px 6px 0;
+            cursor: pointer;
+        }
+
+        .result-item {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-item h3 a {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .result-item h3 a:hover {
+            color: var(--secondary-color);
+        }
+
+        .result-url {
+            color: #008000; /* Green URL link color */
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .result-snippet {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        </header>
+
+    <main class="main-content-page">
+        <section class="search-results-section container">
+            <h1 class="section-title">Search Results for: <span id="searchTerm" class="secondary-color">"..."</span></h1>
+            <p class="section-subtitle" id="resultCount">Showing 4 results.</p>
+
+            <div class="search-input-box">
+                <input type="text" id="newSearchInput" placeholder="Search again...">
+                <button id="newSearchBtn"><i class="fas fa-search"></i> Search</button>
+            </div>
+
+            <div id="resultsList">
+                <div class="result-item">
+                    <h3><a href="security.html">Security Center & Fraud Protection</a></h3>
+                    <span class="result-url">bankofamerica.com/pages/security.html</span>
+                    <p class="result-snippet">Learn about our **Zero Liability Guarantee**, two-factor authentication, and how to **report fraud** immediately. Your safety is our foundation.</p>
+                </div>
+                
+                <div class="result-item">
+                    <h3><a href="personal-banking.html#checking">Compare Checking Accounts</a></h3>
+                    <span class="result-url">bankofamerica.com/pages/personal-banking.html</span>
+                    <p class="result-snippet">View fees, minimum balances, and benefits for the Advantage Banking suite, including the **no monthly fee** account option.</p>
+                </div>
+
+                <div class="result-item">
+                    <h3><a href="digital-banking.html">Mobile Banking and Zelle</a></h3>
+                    <span class="result-url">bankofamerica.com/pages/digital-banking.html</span>
+                    <p class="result-snippet">Enroll in the **Bank of America Mobile App** to deposit checks, pay bills, and use **Zelle** to send money to friends and family.</p>
+                </div>
+                
+                <div class="result-item">
+                    <h3><a href="contact-support.html#faq">Frequently Asked Questions (FAQ)</a></h3>
+                    <span class="result-url">bankofamerica.com/pages/contact-support.html</span>
+                    <p class="result-snippet">Find quick answers to questions about **ATM fees**, replacing a lost card, and setting up direct deposit.</p>
+                </div>
+            </div>
+            
+        </section>
+    </main>
+
+    <footer class="footer">
+        </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Page specific script to parse URL query and display it
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('query');
+            const searchTermSpan = document.getElementById('searchTerm');
+            
+            if (query) {
+                searchTermSpan.textContent = `"${decodeURIComponent(query)}"`;
+                document.getElementById('newSearchInput').value = decodeURIComponent(query);
+            } else {
+                searchTermSpan.textContent = "Your Search";
+            }
+            
+            // Re-implement search logic for the input box on this page
+            const newSearchInput = document.getElementById('newSearchInput');
+            const newSearchBtn = document.getElementById('newSearchBtn');
+            const handleSearch = () => {
+                const newQuery = newSearchInput.value.trim();
+                if (newQuery) {
+                    window.location.href = `search-results.html?query=${encodeURIComponent(newQuery)}`;
+                }
+            };
+
+            newSearchBtn.addEventListener('click', handleSearch);
+            newSearchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleSearch();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

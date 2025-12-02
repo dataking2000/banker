@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Dashboard (Mock) | Bank of America</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <style>
+        /* Dashboard-specific Styles */
+        .dashboard-header {
+            background-color: var(--light-color);
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .dashboard-welcome h1 {
+            font-size: 2rem;
+            color: var(--dark-color);
+        }
+        
+        .dashboard-welcome p {
+            color: var(--text-light);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            padding: 40px 0;
+        }
+
+        .account-summary-card {
+            background-color: var(--white-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 20px;
+        }
+
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .account-header h3 {
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+        }
+
+        .account-details p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .account-details .balance {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary-color);
+        }
+        
+        .action-links a {
+            font-size: 0.95rem;
+            margin-right: 15px;
+        }
+
+        .alert-card {
+            background-color: #fffbe6; /* Light Yellow */
+            color: #856404; /* Dark Yellow Text */
+            border: 1px solid #ffeeba;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .alert-card i {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .side-widget {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .side-widget h4 {
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .side-widget ul {
+            padding: 0;
+        }
+        
+        .side-widget ul li {
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Dashboard-specific Header Overrides (Logged In State) */
+        .dashboard-header-nav .nav-menu {
+            /* Ensure nav-menu is always visible for dashboard */
+            display: flex !important; 
+            margin-left: 20px;
+            justify-content: flex-start;
+        }
+
+        .dashboard-header-nav .nav-right .btn-outline,
+        .dashboard-header-nav .nav-right .btn-secondary {
+            /* Hide general sign-in/enroll buttons when logged in */
+            display: none;
+        }
+        
+        .dashboard-header-nav .nav-right {
+             gap: 20px;
+             padding: 0;
+        }
+
+        .dashboard-header-nav .nav-right .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-header-nav .nav-right .user-menu i {
+            color: var(--white-color);
+            font-size: 1.2rem;
+        }
+        
+        .dashboard-header-nav .nav-right .user-menu span {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .dashboard-header-nav .nav-right .sign-out-btn {
+            background: transparent;
+            border: none;
+            color: var(--white-color);
+            padding: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .dashboard-header-nav .nav-right .sign-out-btn:hover {
+            color: var(--secondary-color);
+        }
+        
+        /* Hide Mobile Toggle on Dashboard (Simpler UX for Logged In) */
+        .dashboard-header-nav .mobile-toggle {
+            display: none !important;
+        }
+
+        .dashboard-header-nav .nav-left a {
+            background-color: transparent !important;
+            color: var(--white-color);
+        }
+        .dashboard-header-nav .nav-left a:hover {
+            color: var(--accent-color);
+        }
+
+    </style>
+</head>
+<body>
+    <header class="header dashboard-header-nav">
+        <div class="container">
+            <nav class="nav">
+                <a href="./dashboard.html" class="logo">
+                    <i class="fas fa-money-bill-wave logo-icon"></i>
+                    <span class="logo-text">Bank<span>of</span>America</span>
+                </a>
+                
+                <div class="nav-menu">
+                    <div class="nav-left">
+                        <a href="./dashboard.html" class="nav-link active">My Dashboard</a>
+                        <a href="#transfers" class="nav-link">Transfers & Payments</a>
+                        <a href="#investments" class="nav-link">Investments (Merrill)</a>
+                        <a href="#support" class="nav-link">Support</a>
+                    </div>
+                    
+                    <div class="nav-right">
+                        <button class="btn-search"><i class="fas fa-search"></i></button>
+                        <div class="user-menu">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Welcome, Alex!</span>
+                        </div>
+                        <a href="../index.html" class="sign-out-btn"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="dashboard-header">
+        <div class="container dashboard-welcome">
+            <div class="alert-card">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>Action Required:</strong> Your credit card payment of $250 is due on 12/05/2023. <a href="#" class="primary-color" style="font-weight: 600;">Make a payment now.</a>
+                </div>
+            </div>
+            <h1>Your Accounts at a Glance</h1>
+            <p>Welcome back, Alex Smith. Last login: 1 minute ago.</p>
+        </div>
+    </section>
+
+    <main class="main-content-page">
+        <div class="container dashboard-grid">
+            
+            <section class="account-details-main">
+                <h2 class="section-title" style="font-size: 1.8rem; margin-bottom: 25px;">Checking & Savings</h2>
+                
+                <div class="account-summary-card">
+                    <div class="account-header">
+                        <h3><i class="fas fa-piggy-bank primary-color"></i> Advantage Plus Checking (...9876)</h3>
+                        <a href="#" class="prop-link">View Statement <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="account-details">
+                        <p>Available Balance:</p>
+                        <p class="balance">$1,452.88</p>
+                    </div>
+                    <div class="action-links pt-3">
+                        <a href="#transfers"><i class="fas fa-exchange-alt"></i> Transfer Funds</a>
+                        <a href="#"><i class="fas fa-money-check"></i> Pay Bills</a>
+                        <a href="#"><i class="fas fa-history"></i> View Transactions</a>
+                    </div>
+                </div>
+
+                <div class="account-summary-card">
+                    <div class="account-header">
+                        <h3><i class="fas fa-dollar-sign primary-color"></i> Advantage Savings (...5432)</h3>
+                        <a href="#" class="prop-link">View Statement <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="account-details">
+                        <p>Total Balance:</p>
+                        <p class="balance">$12,350.15</p>
+                    </div>
+                    <div class="action-links pt-3">
+                        <a href="#transfers"><i class="fas fa-exchange-alt"></i> Set Up Auto Save</a>
+                        <a href="#"><i class="fas fa-chart-line"></i> View Interest Earned</a>
+                    </div>
+                </div>
+                
+                <h2 class="section-title mt-5" style="font-size: 1.8rem; margin-bottom: 25px;">Credit & Lending</h2>
+
+                <div class="account-summary-card">
+                    <div class="account-header">
+                        <h3><i class="fas fa-credit-card secondary-color"></i> Customized Cash Rewards Card (...1234)</h3>
+                        <a href="#" class="prop-link">Card Services <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="account-details">
+                        <p>Current Balance:</p>
+                        <p class="balance" style="color: #DA291C;">$895.00</p>
+                        <p>Credit Available: $4,105.00</p>
+                        <p>Minimum Payment Due: $50.00 (12/05/2023)</p>
+                    </div>
+                    <div class="action-links pt-3">
+                        <a href="#"><i class="fas fa-money-bill-wave"></i> Make a Payment</a>
+                        <a href="#"><i class="fas fa-gift"></i> View Rewards Balance</a>
+                    </div>
+                </div>
+
+                <div class="account-summary-card">
+                    <div class="account-header">
+                        <h3><i class="fas fa-home secondary-color"></i> Home Mortgage (...4567)</h3>
+                        <a href="#" class="prop-link">Loan Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="account-details">
+                        <p>Next Payment:</p>
+                        <p class="balance">$1,850.00</p>
+                        <p>Due Date: 12/15/2023</p>
+                        <p>Principal Remaining: $245,300.00</p>
+                    </div>
+                    <div class="action-links pt-3">
+                        <a href="#"><i class="fas fa-calendar-alt"></i> Pay Ahead</a>
+                        <a href="#"><i class="fas fa-file-pdf"></i> Tax Documents</a>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="dashboard-widgets">
+                
+                <div class="side-widget" id="transfers">
+                    <h4><i class="fas fa-exchange-alt"></i> Quick Transfer</h4>
+                    <form>
+                        <div class="form-group mb-3">
+                            <label for="fromAccount">From</label>
+                            <select id="fromAccount" class="form-control">
+                                <option>Advantage Plus Checking (...9876)</option>
+                                <option>Advantage Savings (...5432)</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="toAccount">To</label>
+                            <select id="toAccount" class="form-control">
+                                <option>Advantage Savings (...5432)</option>
+                                <option>Advantage Plus Checking (...9876)</option>
+                                <option>External Account</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="transferAmount">Amount ($)</label>
+                            <input type="number" id="transferAmount" class="form-control" value="100" min="1" required>
+                        </div>
+                        <button type="submit" class="btn btn-secondary btn-full-width">Execute Transfer</button>
+                    </form>
+                </div>
+                
+                <div class="side-widget" id="investments">
+                    <h4><i class="fas fa-chart-line"></i> Merrill Investment Snapshot</h4>
+                    <p style="margin-bottom: 10px;">Total Portfolio Value:</p>
+                    <p class="balance" style="font-size: 2rem; color: var(--primary-color);">$45,980.75</p>
+                    <ul>
+                        <li><a href="#" class="prop-link">View Portfolio</a></li>
+                        <li><a href="#" class="prop-link">Place a Trade</a></li>
+                        <li><a href="#" class="prop-link">Talk to Advisor</a></li>
+                    </ul>
+                </div>
+                
+                <div class="side-widget" id="support">
+                    <h4><i class="fas fa-headset"></i> Need Help?</h4>
+                    <p>Contact our dedicated preferred client support line or use the Erica Chat bot.</p>
+                    <a href="tel:1-800-432-1000" class="btn btn-outline-dark btn-full-width btn-sm mt-3"><i class="fas fa-phone"></i> Call Support Now</a>
+                    <button class="btn btn-primary btn-full-width btn-sm mt-2" onclick="document.getElementById('assistantBtn').click();">
+                        <i class="fas fa-comment-dots"></i> Start Erica Chat
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <div class="disclosures">
+                    <p>Bank of America, N.A. Member FDIC. Equal Housing Lender. © 2023 Bank of America Corporation. All rights reserved.</p>
+                    <div class="compliance-icons">
+                        <span title="FDIC Insured"><i class="fas fa-landmark"></i> FDIC Insured</span>
+                        <span title="Equal Housing Lender"><i class="fas fa-home"></i> Equal Housing Lender</span>
+                        <span title="Secure Banking"><i class="fas fa-lock"></i> Secure Banking</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <div class="assistant-btn" id="assistantBtn">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+
+    <div class="assistant-modal" id="assistantModal">
+        <div class="assistant-header">
+            <h4><i class="fas fa-comment-dots"></i> Talk to Erica</h4>
+            <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="assistant-body" id="assistantBody">
+            <div class="assistant-message bot">Hello! I'm Erica, your virtual financial assistant. How can I help you today?</div>
+        </div>
+        <div class="assistant-footer">
+            <input type="text" id="chatInput" placeholder="Ask a question..." required>
+            <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <div class="search-modal" id="searchModal">
+        <div class="search-container">
+            <div class="search-header">
+                <h3>Search Bank of America</h3>
+                <button class="close-search" id="closeSearch"><i class="fas fa-times"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); window.location.href = '../pages/search-results.html?query=' + document.getElementById('searchModalInput').value;" class="search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="What are you looking for? (e.g., ESG goals, mortgage rates)" id="searchModalInput">
+            </form>
+            <div class="search-suggestions">
+                <h4>Popular Searches</h4>
+                <a href="./digital-banking.html">Mobile banking app</a>
+                <a href="./personal-banking.html#credit-cards">Credit card offers</a>
+                <a href="./personal-banking.html#loans">Mortgage rates</a>
+                <a href="./wealth-management.html">Investment accounts</a>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Simple mock transfer success message
+        document.querySelector('.side-widget form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Transfer of $' + document.getElementById('transferAmount').value + ' successful!');
+            document.getElementById('transferAmount').value = 100; // Reset
+        });
+    </script>
+</body>
+</html>
