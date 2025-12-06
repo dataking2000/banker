@@ -1,1 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Statements (Modal)</title>
+    <style>
+        /* --- General Styling (from previous pages) --- */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            color: #333;
+        }
+        .header {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-bottom: 2px solid #004d9c;
+            text-align: center;
+        }
+        .header h1 {
+            color: #004d9c;
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .container {
+            padding: 20px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            padding: 15px;
+        }
+        .account-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        .account-details strong {
+            display: block;
+            font-size: 1.1em;
+            color: #004d9c;
+        }
+        .account-details span {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+        .statement-btn {
+            background-color: #cc0000;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            white-space: nowrap;
+            /* Added cursor style for simulation */
+            cursor: pointer; 
+            border: none;
+        }
+        .transactions-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        .transactions-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.9em;
+            border-bottom: 1px dashed #eee;
+        }
+        .transactions-list li:last-child {
+            border-bottom: none;
+        }
+        .transaction-amount {
+            font-weight: bold;
+        }
+        .debit { color: #cc0000; }
+        .credit { color: #008000; }
+        .section-title {
+             font-size: 1.1em;
+             font-weight: bold;
+             margin-bottom: 10px;
+        }
+
+        /* --- Modal Styling --- */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh; /* Limits height for scrolling */
+            overflow-y: auto;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+        
+        /* Modal Statement Details Styling */
+        .statement-detail h2 {
+            color: #004d9c;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+        .summary-box {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 0.95em;
+        }
+        .summary-box strong {
+            color: #cc0000;
+        }
+        .action-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .action-buttons a {
+            padding: 10px 20px;
+            background-color: #004d9c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        /* Transaction Table inside Modal */
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .transaction-table th, .transaction-table td {
+            padding: 10px 5px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .transaction-table th {
+            background-color: #e6e6e6;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="header">
+        <h1>Account Statements & Summary</h1>
+    </div>
+
+    <div class="container">
+        
+        <div class="card">
+            <div class="account-summary">
+                <div class="account-details">
+                    <strong>Advantage Plus Checking (...9876)</strong>
+                    <span>$1,452.88</span>
+                </div>
+                <button class="statement-btn" onclick="document.getElementById('checking-statement-modal').style.display='flex'">View Statement</button>
+            </div>
+
+            <div class="section-title">Recent Transactions (Up to 5)</div>
+            <ul class="transactions-list">
+                <li><span>11/30 - Monthly Service Fee</span><span class="transaction-amount debit">-$5.95</span></li>
+                <li><span>11/25 - Transfer to Savings (...5432)</span><span class="transaction-amount debit">-$500.00</span></li>
+                <li><span>11/20 - Debit Purchase - Grocery Store</span><span class="transaction-amount debit">-$78.99</span></li>
+                <li><span>11/15 - Direct Deposit - Paycheck</span><span class="transaction-amount credit">+$1,500.00</span></li>
+                <li><span>11/08 - ATM Withdrawal</span><span class="transaction-amount debit">-$300.00</span></li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="account-summary">
+                <div class="account-details">
+                    <strong>Advantage Savings (...5432)</strong>
+                    <span>$12,350.15</span>
+                </div>
+                <button class="statement-btn" onclick="alert('Viewing Savings Statement...')">View Statement</button>
+            </div>
+            </div>
+        
+    </div>
+
+    <div id="checking-statement-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="document.getElementById('checking-statement-modal').style.display='none'">&times;</span>
+            
+            <div class="statement-detail">
+                <h2>Advantage Plus Checking (...9876)</h2>
+                <p style="font-size: 1.1em; font-weight: bold;">Statement Period: November 01, 2025 - November 30, 2025</p>
+
+                <div style="margin-top: 20px;">
+                    <h3>Summary</h3>
+                    <div class="summary-box"><span>Beginning Balance (11/01/2025):</span><strong>$1,850.55</strong></div>
+                    <div class="summary-box"><span>Total Deposits:</span><strong class="credit">$1,500.00</strong></div>
+                    <div class="summary-box"><span>Total Withdrawals/Checks:</span><strong class="debit">($1,897.67)</strong></div>
+                    <hr>
+                    <div class="summary-box" style="font-size: 1.2em; font-weight: bold;"><span>Ending Balance (11/30/2025):</span><strong>$1,452.88</strong></div>
+                </div>
+
+                <h3 style="margin-top: 20px;">Detailed Transactions</h3>
+                <table class="transaction-table">
+                    <thead><tr><th>Date</th><th>Description</th><th>Withdrawal</th><th>Deposit</th></tr></thead>
+                    <tbody>
+                        <tr><td>11/01</td><td>Beginning Balance</td><td></td><td></td></tr>
+                        <tr><td>11/05</td><td>Online Payment to Utility Co.</td><td class="debit">$85.00</td><td></td></tr>
+                        <tr><td>11/08</td><td>ATM Withdrawal</td><td class="debit">$300.00</td><td></td></tr>
+                        <tr><td>11/15</td><td>Direct Deposit - Paycheck</td><td></td><td class="credit">$1,500.00</td></tr>
+                        <tr><td>11/20</td><td>Debit Card Purchase - Grocery Store</td><td class="debit">$78.99</td><td></td></tr>
+                        <tr><td>11/25</td><td>Online Transfer to Savings (...5432)</td><td class="debit">$500.00</td><td></td></tr>
+                        <tr><td>11/30</td><td>Monthly Service Fee</td><td class="debit">$5.95</td><td></td></tr>
+                        <tr><td>11/30</td><td>Ending Balance</td><td></td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="action-buttons">
+                <a href="#">Download PDF</a>
+                <a href="#">Print Statement</a>
+            </div>
+        </div>
+    </div>
+
+    </body>
+</html>
+ 
  
