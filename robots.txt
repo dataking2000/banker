@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /pages/dashboard.html
+Disallow: /pages/enroll.html
+Disallow: /pages/login.html
+Disallow: /pages/admin.html
